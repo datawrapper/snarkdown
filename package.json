@@ -1,5 +1,5 @@
 {
-  "name": "snarkdown",
+  "name": "@datawrapper/snarkdown",
   "description": "Transform Markdown into HTML.",
   "version": "2.0.0",
   "main": "./dist/snarkdown.js",
