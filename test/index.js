@@ -209,7 +209,7 @@ describe('snarkdown()', () => {
 			expect(snarkdown('<a title=**foo**>')).to.equal('<a title=**foo**>');
 		});
 
-		it.failing('should ignore > inside quoted arguments', () => {
+		it.skip('should ignore > inside quoted arguments', () => {
 			// TODO: snarkdown still parses markdown inside quoted HTML arguments if it's
 			// preceeded by a > character inside the argument (which is valid HTML). This
 			// kind of stuff is very hard to fix with regular expressions only.
