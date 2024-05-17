@@ -184,4 +184,36 @@ describe('snarkdown()', () => {
 			expect(snarkdown('\\#foo')).to.equal('#foo');
 		});
 	});
+
+	describe('markdown in html attributes', () => {
+		it('should not parse inside html attributes', () => {
+			expect(snarkdown('<div title="I **don\'t** parse"></div>')).to.equal('<div title="I **don\'t** parse"></div>');
+			expect(snarkdown('<a class="_b" target="_blank">a</a>')).to.equal('<a class="_b" target="_blank">a</a>');
+		});
+
+		it('should not parse markdown in arguments', () => {
+			expect(snarkdown('<a **foo**="bar">')).to.equal('<a **foo**="bar">');
+		});
+
+		it('should parse inside tag children', () => {
+			expect(snarkdown('<div>This **is** fine</div>')).to.equal('<div>This <strong>is</strong> fine</div>');
+		});
+
+		it('should ignore < if not followed by letter', () => {
+			expect(snarkdown('5 is < **than** 10')).to.equal('5 is < <strong>than</strong> 10');
+			expect(snarkdown('5 is < **than** 10, but > 2')).to.equal('5 is < <strong>than</strong> 10, but > 2');
+			expect(snarkdown('5 is **<** 10, but **>** 2')).to.equal('5 is <strong><</strong> 10, but <strong>></strong> 2');
+		});
+
+		it('should not parse markdown in unquoted attributes', () => {
+			expect(snarkdown('<a title=**foo**>')).to.equal('<a title=**foo**>');
+		});
+
+		it.skip('should ignore > inside quoted arguments', () => {
+			// TODO: snarkdown still parses markdown inside quoted HTML arguments if it's
+			// preceeded by a > character inside the argument (which is valid HTML). This
+			// kind of stuff is very hard to fix with regular expressions only.
+			expect(snarkdown('<div title="5 > 10 **foo**">works</div>')).to.equal('<div title="5 > 10 **foo**">works</div>');
+		});
+	});
 });
